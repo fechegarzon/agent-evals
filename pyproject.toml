@@ -1,0 +1,57 @@
+[project]
+name = "agent-evals"
+version = "0.1.0"
+description = "Offline evals, an LLM judge with a pinned version, and regression gates for LLM agents."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Federico Garzón", email = "fechegarzon@gmail.com" }]
+keywords = ["llm", "evals", "llm-as-judge", "agents", "regression-testing"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Testing",
+]
+dependencies = [
+    "pydantic>=2.6",
+    "pyyaml>=6.0",
+    "jsonschema>=4.21",
+]
+
+[project.optional-dependencies]
+anthropic = ["anthropic>=1.0"]
+openai = ["openai>=1.50"]
+
+[project.scripts]
+agent-evals = "agent_evals.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/fechegarzon/agent-evals"
+"Related writing" = "https://github.com/fechegarzon/ai-systems-in-production"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agent_evals"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"

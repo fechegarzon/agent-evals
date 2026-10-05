@@ -1,0 +1,16 @@
+# USD per 1M tokens. The runner multiplies these by the token counts each call reports.
+# Prices change. Check your provider's pricing page before you trust a dollar figure,
+# and bump `version` when you edit this file so old reports stay explainable.
+version: "2026-10-01"
+currency: USD
+models:
+  # Toy agents in examples/. Priced like a small hosted model so the cost columns
+  # show real-looking numbers.
+  toy-agent-v1: { input_per_mtok: 1.00, output_per_mtok: 5.00 }
+  toy-agent-v2: { input_per_mtok: 1.00, output_per_mtok: 5.00 }
+
+  # Judges
+  mock-judge: { input_per_mtok: 0.00, output_per_mtok: 0.00 }
+  claude-sonnet-5-5: { input_per_mtok: 2.00, output_per_mtok: 10.00 }
+  claude-haiku-4-5: { input_per_mtok: 1.00, output_per_mtok: 5.00 }
+  gpt-4.1-2025-04-14: { input_per_mtok: 2.00, output_per_mtok: 8.00 }

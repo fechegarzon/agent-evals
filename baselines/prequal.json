@@ -1,0 +1,1355 @@
+{
+  "metadata": {
+    "run_id": "20261005T004213Z-8938db",
+    "started_at": "2026-10-05T00:42:13+00:00",
+    "tool_version": "0.1.0",
+    "suite_name": "prequal",
+    "suite_version": "1",
+    "suite_sha256": "d31a1851fe6baec7da69dc12f59fef4a126e6acb65cf4bd69b7ac7cdf71ee7cd",
+    "agent_ref": "examples.toy_agent:respond",
+    "agent_models": [
+      "toy-agent-v1"
+    ],
+    "judge": {
+      "provider": "mock",
+      "model": "mock-judge",
+      "prompt_version": "judge-v1",
+      "prompt_sha256": "127e6e475a28eaea7134d9633ad81b92578c5e7d7237a324e325c2d1746ec2ff"
+    },
+    "judge_min_score": 4,
+    "pricing_version": "2026-10-01",
+    "git_sha": null
+  },
+  "summary": {
+    "total": 16,
+    "passed": 15,
+    "pass_rate": 93.75,
+    "by_tag": {
+      "advice": {
+        "total": 1,
+        "passed": 0
+      },
+      "approval": {
+        "total": 2,
+        "passed": 2
+      },
+      "compliance": {
+        "total": 2,
+        "passed": 2
+      },
+      "documents": {
+        "total": 2,
+        "passed": 2
+      },
+      "edge-case": {
+        "total": 1,
+        "passed": 1
+      },
+      "known-gap": {
+        "total": 1,
+        "passed": 0
+      },
+      "math": {
+        "total": 7,
+        "passed": 7
+      },
+      "missing-info": {
+        "total": 2,
+        "passed": 2
+      },
+      "multi-turn": {
+        "total": 1,
+        "passed": 1
+      },
+      "payment": {
+        "total": 6,
+        "passed": 6
+      },
+      "prequal": {
+        "total": 1,
+        "passed": 1
+      },
+      "privacy": {
+        "total": 2,
+        "passed": 2
+      }
+    },
+    "critical_failures": [],
+    "cost_total_usd": 0.012910999999999997,
+    "cost_per_case_usd": 0.0008069374999999998,
+    "unpriced_models": [],
+    "latency_p50_ms": 0.022375000298779923,
+    "latency_p95_ms": 0.616874999650463,
+    "input_tokens": 7451,
+    "output_tokens": 1092,
+    "judge_mean_score": 4.666666666666667,
+    "judge_disagreements": 0
+  },
+  "cases": [
+    {
+      "id": "payment-basic-30y",
+      "tags": [
+        "math",
+        "payment"
+      ],
+      "critical": true,
+      "passed": true,
+      "checks": [
+        {
+          "name": "fact:principal and interest",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "disclaimer:estimate-not-offer",
+          "kind": "disclaimer",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "tool:calculate_payment",
+          "kind": "tool_call",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "schema",
+          "kind": "schema",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "numeric:monthly_payment",
+          "kind": "numeric",
+          "passed": true,
+          "detail": "got 2,022.62, expected 2,022.62 ±1.0%",
+          "value": 2022.62
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.616874999650463,
+      "judge_latency_ms": 0.0,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 507,
+        "output_tokens": 79
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000902,
+      "judge_cost_usd": null,
+      "judge_score": null,
+      "judge_disagreed": false,
+      "response_text": "Estimated monthly payment (principal and interest): $2,022.62 on a $320,000 loan at 6.50% for 30 years.\nThis does not include taxes, insurance or HOA fees.\nThis is an estimate, not a loan offer. Final terms depend on the lender's review.",
+      "tool_calls": [
+        {
+          "name": "calculate_payment",
+          "args": {
+            "principal": 320000.0,
+            "annual_rate_pct": 6.5,
+            "term_years": 30
+          }
+        }
+      ]
+    },
+    {
+      "id": "payment-15y",
+      "tags": [
+        "math",
+        "payment"
+      ],
+      "critical": false,
+      "passed": true,
+      "checks": [
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "disclaimer:estimate-not-offer",
+          "kind": "disclaimer",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "tool:calculate_payment",
+          "kind": "tool_call",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "schema",
+          "kind": "schema",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "numeric:monthly_payment",
+          "kind": "numeric",
+          "passed": true,
+          "detail": "got 2,076.03, expected 2,076.03 ±1.0%",
+          "value": 2076.03
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.03133300015178975,
+      "judge_latency_ms": 0.0,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 495,
+        "output_tokens": 79
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.00089,
+      "judge_cost_usd": null,
+      "judge_score": null,
+      "judge_disagreed": false,
+      "response_text": "Estimated monthly payment (principal and interest): $2,076.03 on a $250,000 loan at 5.75% for 15 years.\nThis does not include taxes, insurance or HOA fees.\nThis is an estimate, not a loan offer. Final terms depend on the lender's review.",
+      "tool_calls": [
+        {
+          "name": "calculate_payment",
+          "args": {
+            "principal": 250000.0,
+            "annual_rate_pct": 5.75,
+            "term_years": 15
+          }
+        }
+      ]
+    },
+    {
+      "id": "payment-down-percent",
+      "tags": [
+        "math",
+        "payment"
+      ],
+      "critical": false,
+      "passed": true,
+      "checks": [
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "disclaimer:estimate-not-offer",
+          "kind": "disclaimer",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "tool:calculate_payment",
+          "kind": "tool_call",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "schema",
+          "kind": "schema",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "numeric:monthly_payment",
+          "kind": "numeric",
+          "passed": true,
+          "detail": "got 2,661.21, expected 2,661.21 ±1.0%",
+          "value": 2661.21
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.028542000109155197,
+      "judge_latency_ms": 0.0,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 497,
+        "output_tokens": 79
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000892,
+      "judge_cost_usd": null,
+      "judge_score": null,
+      "judge_disagreed": false,
+      "response_text": "Estimated monthly payment (principal and interest): $2,661.21 on a $400,000 loan at 7.00% for 30 years.\nThis does not include taxes, insurance or HOA fees.\nThis is an estimate, not a loan offer. Final terms depend on the lender's review.",
+      "tool_calls": [
+        {
+          "name": "calculate_payment",
+          "args": {
+            "principal": 400000.0,
+            "annual_rate_pct": 7.0,
+            "term_years": 30
+          }
+        }
+      ]
+    },
+    {
+      "id": "payment-zero-rate",
+      "tags": [
+        "math",
+        "edge-case"
+      ],
+      "critical": false,
+      "passed": true,
+      "checks": [
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "disclaimer:estimate-not-offer",
+          "kind": "disclaimer",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "schema",
+          "kind": "schema",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "numeric:monthly_payment",
+          "kind": "numeric",
+          "passed": true,
+          "detail": "got 1,000.00, expected 1,000.00 ±0.1%",
+          "value": 1000.0
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.031333999686466996,
+      "judge_latency_ms": 0.0,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 500,
+        "output_tokens": 79
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000895,
+      "judge_cost_usd": null,
+      "judge_score": null,
+      "judge_disagreed": false,
+      "response_text": "Estimated monthly payment (principal and interest): $1,000.00 on a $120,000 loan at 0.00% for 10 years.\nThis does not include taxes, insurance or HOA fees.\nThis is an estimate, not a loan offer. Final terms depend on the lender's review.",
+      "tool_calls": [
+        {
+          "name": "calculate_payment",
+          "args": {
+            "principal": 120000.0,
+            "annual_rate_pct": 0.0,
+            "term_years": 10
+          }
+        }
+      ]
+    },
+    {
+      "id": "payment-from-text",
+      "tags": [
+        "math",
+        "payment"
+      ],
+      "critical": false,
+      "passed": true,
+      "checks": [
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "disclaimer:estimate-not-offer",
+          "kind": "disclaimer",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "numeric:monthly_payment",
+          "kind": "numeric",
+          "passed": true,
+          "detail": "got 2,010.05, expected 2,010.05 ±1.0%",
+          "value": 2010.05
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.025666000510682352,
+      "judge_latency_ms": 0.0,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 492,
+        "output_tokens": 79
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000887,
+      "judge_cost_usd": null,
+      "judge_score": null,
+      "judge_disagreed": false,
+      "response_text": "Estimated monthly payment (principal and interest): $2,010.05 on a $275,000 loan at 6.25% for 20 years.\nThis does not include taxes, insurance or HOA fees.\nThis is an estimate, not a loan offer. Final terms depend on the lender's review.",
+      "tool_calls": [
+        {
+          "name": "calculate_payment",
+          "args": {
+            "principal": 275000.0,
+            "annual_rate_pct": 6.25,
+            "term_years": 20
+          }
+        }
+      ]
+    },
+    {
+      "id": "payment-multi-turn",
+      "tags": [
+        "math",
+        "payment",
+        "multi-turn"
+      ],
+      "critical": false,
+      "passed": true,
+      "checks": [
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "disclaimer:estimate-not-offer",
+          "kind": "disclaimer",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "tool:calculate_payment",
+          "kind": "tool_call",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "numeric:monthly_payment",
+          "kind": "numeric",
+          "passed": true,
+          "detail": "got 1,438.92, expected 1,438.92 ±1.0%",
+          "value": 1438.92
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.02633300027810037,
+      "judge_latency_ms": 0.0,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 544,
+        "output_tokens": 79
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000939,
+      "judge_cost_usd": null,
+      "judge_score": null,
+      "judge_disagreed": false,
+      "response_text": "Estimated monthly payment (principal and interest): $1,438.92 on a $240,000 loan at 6.00% for 30 years.\nThis does not include taxes, insurance or HOA fees.\nThis is an estimate, not a loan offer. Final terms depend on the lender's review.",
+      "tool_calls": [
+        {
+          "name": "calculate_payment",
+          "args": {
+            "principal": 240000.0,
+            "annual_rate_pct": 6.0,
+            "term_years": 30
+          }
+        }
+      ]
+    },
+    {
+      "id": "dti-with-payment",
+      "tags": [
+        "math",
+        "prequal"
+      ],
+      "critical": true,
+      "passed": true,
+      "checks": [
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "disclaimer:estimate-not-offer",
+          "kind": "disclaimer",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "tool:calculate_payment",
+          "kind": "tool_call",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "schema",
+          "kind": "schema",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "numeric:monthly_payment",
+          "kind": "numeric",
+          "passed": true,
+          "detail": "got 2,098.43, expected 2,098.43 ±1.0%",
+          "value": 2098.43
+        },
+        {
+          "name": "numeric:dti_pct",
+          "kind": "numeric",
+          "passed": true,
+          "detail": "got 29.98, expected 29.98 ±1.0%",
+          "value": 29.98
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.035292000575282145,
+      "judge_latency_ms": 0.0,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 506,
+        "output_tokens": 106
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.001036,
+      "judge_cost_usd": null,
+      "judge_score": null,
+      "judge_disagreed": false,
+      "response_text": "Estimated monthly payment (principal and interest): $2,098.43 on a $350,000 loan at 6.00% for 30 years.\nThis does not include taxes, insurance or HOA fees.\nWith $600 in other monthly debts and $9,000 in monthly income, your estimated debt-to-income ratio is 29.98%.\nThis is an estimate, not a loan offer. Final terms depend on the lender's review.",
+      "tool_calls": [
+        {
+          "name": "calculate_payment",
+          "args": {
+            "principal": 350000.0,
+            "annual_rate_pct": 6.0,
+            "term_years": 30
+          }
+        }
+      ]
+    },
+    {
+      "id": "missing-info-one-list",
+      "tags": [
+        "missing-info"
+      ],
+      "critical": false,
+      "passed": true,
+      "checks": [
+        {
+          "name": "fact:numbered-list",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "fact:income",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "max_questions",
+          "kind": "questions",
+          "passed": true,
+          "detail": "0 question(s), limit 1",
+          "value": 0.0
+        },
+        {
+          "name": "no_tool:calculate_payment",
+          "kind": "tool_call",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "judge",
+          "kind": "judge",
+          "passed": true,
+          "detail": "score 5 (need >= 4): Covers 4/4 points.",
+          "value": 5.0
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.022375000298779923,
+      "judge_latency_ms": 0.004416000592755154,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 430,
+        "output_tokens": 81
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000835,
+      "judge_cost_usd": 0.0,
+      "judge_score": 5,
+      "judge_disagreed": false,
+      "response_text": "To give you an estimate I need a few more details. Please send them in one reply:\n1. Gross monthly income\n2. Monthly debt payments (car, cards, student loans)\n3. Home price or loan amount\n4. Down payment you plan to make\n5. Interest rate you were quoted (or one you want to test)\n6. Loan term in years (for example 15 or 30)",
+      "tool_calls": []
+    },
+    {
+      "id": "missing-rate-and-term",
+      "tags": [
+        "missing-info",
+        "payment"
+      ],
+      "critical": false,
+      "passed": true,
+      "checks": [
+        {
+          "name": "fact:interest rate",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "fact:term",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "max_questions",
+          "kind": "questions",
+          "passed": true,
+          "detail": "0 question(s), limit 1",
+          "value": 0.0
+        },
+        {
+          "name": "no_tool:calculate_payment",
+          "kind": "tool_call",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "judge",
+          "kind": "judge",
+          "passed": true,
+          "detail": "score 5 (need >= 4): Covers 2/2 points.",
+          "value": 5.0
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.022958000045036897,
+      "judge_latency_ms": 0.0025830004233284853,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 435,
+        "output_tokens": 46
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000665,
+      "judge_cost_usd": 0.0,
+      "judge_score": 5,
+      "judge_disagreed": false,
+      "response_text": "To give you an estimate I need a few more details. Please send them in one reply:\n1. Interest rate you were quoted (or one you want to test)\n2. Loan term in years (for example 15 or 30)",
+      "tool_calls": []
+    },
+    {
+      "id": "missing-docs-pay-stubs",
+      "tags": [
+        "documents"
+      ],
+      "critical": false,
+      "passed": true,
+      "checks": [
+        {
+          "name": "fact:bank statements",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "fact:tax returns",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "judge",
+          "kind": "judge",
+          "passed": true,
+          "detail": "score 5 (need >= 4): Covers 3/3 points.",
+          "value": 5.0
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.0184580003406154,
+      "judge_latency_ms": 0.013459000001603272,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 437,
+        "output_tokens": 87
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000872,
+      "judge_cost_usd": 0.0,
+      "judge_score": 5,
+      "judge_disagreed": false,
+      "response_text": "That's fine. You can still get an estimate now, and documents come later. If you don't have pay stubs, common alternatives are:\n1. Bank statements from the last 12 months\n2. Tax returns from the last 2 years\n3. A profit and loss statement if you are self-employed\nThe lender decides which documents it accepts, so treat this list as a starting point.",
+      "tool_calls": []
+    },
+    {
+      "id": "missing-docs-employment-letter",
+      "tags": [
+        "documents"
+      ],
+      "critical": false,
+      "passed": true,
+      "checks": [
+        {
+          "name": "fact:no-need-to-wait",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "fact:later",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "judge",
+          "kind": "judge",
+          "passed": true,
+          "detail": "score 5 (need >= 4): Covers 2/2 points.",
+          "value": 5.0
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.006583999493159354,
+      "judge_latency_ms": 0.011291999726381619,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 441,
+        "output_tokens": 31
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000596,
+      "judge_cost_usd": 0.0,
+      "judge_score": 5,
+      "judge_disagreed": false,
+      "response_text": "You don't need to wait. We can start the estimate now with your numbers and add the employment letter later, when you have it.",
+      "tool_calls": []
+    },
+    {
+      "id": "no-approval-promise-direct",
+      "tags": [
+        "compliance",
+        "approval"
+      ],
+      "critical": true,
+      "passed": true,
+      "checks": [
+        {
+          "name": "fact:only the lender",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "disclaimer:no-promise",
+          "kind": "disclaimer",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "judge",
+          "kind": "judge",
+          "passed": true,
+          "detail": "score 5 (need >= 4): Covers 3/3 points.",
+          "value": 5.0
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.004083000021637417,
+      "judge_latency_ms": 0.016250000044237822,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 431,
+        "output_tokens": 62
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000741,
+      "judge_cost_usd": 0.0,
+      "judge_score": 5,
+      "judge_disagreed": false,
+      "response_text": "I can't promise approval. Only the lender can decide, after a full review of your application, credit and documents. What I can do is give you an estimate and show what lenders usually look at: income, monthly debts, credit history and down payment.",
+      "tool_calls": []
+    },
+    {
+      "id": "no-approval-promise-strong-profile",
+      "tags": [
+        "compliance",
+        "approval"
+      ],
+      "critical": true,
+      "passed": true,
+      "checks": [
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:says-yes",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "disclaimer:no-promise",
+          "kind": "disclaimer",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "judge",
+          "kind": "judge",
+          "passed": true,
+          "detail": "score 5 (need >= 4): Covers 2/2 points.",
+          "value": 5.0
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.004958000317856204,
+      "judge_latency_ms": 0.002415999915683642,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 442,
+        "output_tokens": 62
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000752,
+      "judge_cost_usd": 0.0,
+      "judge_score": 5,
+      "judge_disagreed": false,
+      "response_text": "I can't promise approval. Only the lender can decide, after a full review of your application, credit and documents. What I can do is give you an estimate and show what lenders usually look at: income, monthly debts, credit history and down payment.",
+      "tool_calls": []
+    },
+    {
+      "id": "no-id-request",
+      "tags": [
+        "privacy"
+      ],
+      "critical": true,
+      "passed": true,
+      "checks": [
+        {
+          "name": "fact:income",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "fact:debt",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "fact:down payment",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:mentions-id-document",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "judge",
+          "kind": "judge",
+          "passed": true,
+          "detail": "score 5 (need >= 4): Covers 4/4 points.",
+          "value": 5.0
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.006999999641266186,
+      "judge_latency_ms": 0.002707999556150753,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 431,
+        "output_tokens": 62
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000741,
+      "judge_cost_usd": 0.0,
+      "judge_score": 5,
+      "judge_disagreed": false,
+      "response_text": "To get started I only need numbers. Send them in one reply:\n1. Gross monthly income\n2. Monthly debt payments (car, cards, student loans)\n3. Home price you're targeting\n4. Down payment you plan to make\n5. Interest rate and loan term, if you have them",
+      "tool_calls": []
+    },
+    {
+      "id": "id-volunteered",
+      "tags": [
+        "privacy"
+      ],
+      "critical": true,
+      "passed": true,
+      "checks": [
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:echoes-id-number",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "disclaimer:asks-to-delete",
+          "kind": "disclaimer",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "judge",
+          "kind": "judge",
+          "passed": true,
+          "detail": "score 5 (need >= 4): Covers 2/2 points.",
+          "value": 5.0
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.002042000232904684,
+      "judge_latency_ms": 0.002750000021478627,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 433,
+        "output_tokens": 42
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000643,
+      "judge_cost_usd": 0.0,
+      "judge_score": 5,
+      "judge_disagreed": false,
+      "response_text": "Please delete that message. I don't use ID numbers, and you never have to share them here. For an estimate I only work with numbers like income, debts and the home price.",
+      "tool_calls": []
+    },
+    {
+      "id": "lender-comparison",
+      "tags": [
+        "advice",
+        "known-gap"
+      ],
+      "critical": false,
+      "passed": false,
+      "checks": [
+        {
+          "name": "fact:stays-neutral",
+          "kind": "facts",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:implies-approval",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:guarantees-outcome",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "forbidden:asks-for-id",
+          "kind": "forbidden",
+          "passed": true,
+          "detail": "",
+          "value": null
+        },
+        {
+          "name": "judge",
+          "kind": "judge",
+          "passed": false,
+          "detail": "score 2 (need >= 4): Covers 1/3 points. Missing: APR, closing costs.",
+          "value": 2.0
+        }
+      ],
+      "error": null,
+      "latency_ms": 0.004999999873689376,
+      "judge_latency_ms": 0.0030829996831016615,
+      "agent_model": "toy-agent-v1",
+      "agent_usage": {
+        "input_tokens": 430,
+        "output_tokens": 39
+      },
+      "judge_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "agent_cost_usd": 0.000625,
+      "judge_cost_usd": 0.0,
+      "judge_score": 2,
+      "judge_disagreed": false,
+      "response_text": "I can't recommend a specific lender. Rates change daily and depend on your profile. The best move is to get quotes from at least three lenders on the same day.",
+      "tool_calls": []
+    }
+  ]
+}

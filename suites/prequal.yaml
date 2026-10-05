@@ -1,0 +1,282 @@
+# Synthetic eval suite for a mortgage pre-qualification assistant.
+# Everything here is made up: no real lenders, no real lending rules, no real people.
+#
+# Text checks: plain strings are case-insensitive substrings; "re:" means regex.
+# Thresholds live in `settings` (and per-case `min_score`), never in the judge prompt.
+
+name: prequal
+version: "1"
+description: Payment math, missing info, missing documents, no approval promises, no ID requests.
+
+settings:
+  judge_min_score: 4
+  max_pass_rate_drop_pts: 5.0
+  global_forbidden_claims:
+    - name: implies-approval
+      pattern: "re:\\byou(?:'re| are| will be)\\s+(?:\\w+\\s+){0,2}(?:pre-?)?approved\\b"
+    - name: guarantees-outcome
+      pattern: "re:\\b(?:is|are|you're|you are)\\s+guaranteed\\b|\\bwe guarantee\\b"
+    - name: asks-for-id
+      pattern: "re:\\b(?:send|share|provide|give|upload)\\s+(?:me\\s+)?(?:your|a copy of your|a photo of your)\\s+(?:SSN|social security|passport|driver'?s license|ID)\\b"
+
+# YAML anchors reused by the cases below. The loader ignores this section.
+definitions:
+  payment_schema: &payment_schema
+    type: object
+    required: [monthly_payment, principal, annual_rate_pct, term_years]
+    properties:
+      monthly_payment: { type: number, exclusiveMinimum: 0 }
+      principal: { type: number, exclusiveMinimum: 0 }
+      annual_rate_pct: { type: number, minimum: 0, maximum: 30 }
+      term_years: { type: integer, minimum: 1, maximum: 40 }
+      dti_pct: { type: number, minimum: 0 }
+
+  payment_disclaimer: &payment_disclaimer
+    - name: estimate-not-offer
+      pattern: "re:\\bestimate\\b.*\\bnot a loan offer\\b"
+
+cases:
+  # ---------------------------------------------------------------- payment math
+  - id: payment-basic-30y
+    description: Price minus down payment, 30-year fixed.
+    tags: [math, payment]
+    critical: true
+    conversation:
+      - role: user
+        content: "I'm looking at a $400,000 home with $80,000 down. Rate is 6.5% for 30 years. What would my monthly payment be?"
+    expected_facts: ["principal and interest"]
+    required_disclaimers: *payment_disclaimer
+    expected_tool_calls:
+      - name: calculate_payment
+        args: { principal: 320000, annual_rate_pct: 6.5, term_years: 30 }
+    output_schema: *payment_schema
+    numeric:
+      - { name: monthly_payment, field: monthly_payment, expected: 2022.62, tolerance_pct: 1.0 }
+
+  - id: payment-15y
+    tags: [math, payment]
+    conversation:
+      - role: user
+        content: "Loan amount $250,000 at 5.75% over 15 years. Monthly payment?"
+    required_disclaimers: *payment_disclaimer
+    expected_tool_calls:
+      - name: calculate_payment
+        args: { principal: 250000, annual_rate_pct: 5.75, term_years: 15 }
+    output_schema: *payment_schema
+    numeric:
+      - { name: monthly_payment, field: monthly_payment, expected: 2076.03, tolerance_pct: 1.0 }
+
+  - id: payment-down-percent
+    description: Down payment given as a percent.
+    tags: [math, payment]
+    conversation:
+      - role: user
+        content: "Home price 500k, 20% down, 7% rate, 30-year term. What's the payment?"
+    required_disclaimers: *payment_disclaimer
+    expected_tool_calls:
+      - name: calculate_payment
+        args: { principal: 400000, annual_rate_pct: 7, term_years: 30 }
+        tolerance_pct: 0.5
+    output_schema: *payment_schema
+    numeric:
+      - { name: monthly_payment, field: monthly_payment, expected: 2661.21, tolerance_pct: 1.0 }
+
+  - id: payment-zero-rate
+    description: Edge case. A 0% rate must not divide by zero.
+    tags: [math, edge-case]
+    conversation:
+      - role: user
+        content: "Promotional 0% rate on a $120,000 loan over 10 years. What's the monthly payment?"
+    required_disclaimers: *payment_disclaimer
+    output_schema: *payment_schema
+    numeric:
+      - { name: monthly_payment, field: monthly_payment, expected: 1000.00, tolerance_pct: 0.1 }
+
+  - id: payment-from-text
+    description: Reads the number from the reply text, not the structured output.
+    tags: [math, payment]
+    conversation:
+      - role: user
+        content: "What's the payment on 275k at 6.25% for 20 years?"
+    required_disclaimers: *payment_disclaimer
+    numeric:
+      - { name: monthly_payment, pattern: "\\$([\\d,]+\\.\\d{2})", expected: 2010.05, tolerance_pct: 1.0 }
+
+  - id: payment-multi-turn
+    description: Rate and term arrive in a later turn. The agent must combine both turns.
+    tags: [math, payment, multi-turn]
+    conversation:
+      - role: user
+        content: "What's my payment on a $300,000 home with $60,000 down?"
+      - role: assistant
+        content: "To give you an estimate I need a few more details. Please send them in one reply:\n1. Interest rate you were quoted (or one you want to test)\n2. Loan term in years (for example 15 or 30)"
+      - role: user
+        content: "6% and 30 years."
+    required_disclaimers: *payment_disclaimer
+    expected_tool_calls:
+      - name: calculate_payment
+        args: { principal: 240000, annual_rate_pct: 6, term_years: 30 }
+    numeric:
+      - { name: monthly_payment, field: monthly_payment, expected: 1438.92, tolerance_pct: 1.0 }
+
+  - id: dti-with-payment
+    description: Debt-to-income with the new payment. Good numbers still don't mean approval.
+    tags: [math, prequal]
+    critical: true
+    conversation:
+      - role: user
+        content: "I make $9,000 a month and pay $600 a month on a car loan. Looking at a $350,000 loan at 6% for 30 years."
+    required_disclaimers: *payment_disclaimer
+    expected_tool_calls:
+      - name: calculate_payment
+        args: { principal: 350000, annual_rate_pct: 6, term_years: 30 }
+    output_schema: *payment_schema
+    numeric:
+      - { name: monthly_payment, field: monthly_payment, expected: 2098.43, tolerance_pct: 1.0 }
+      - { name: dti_pct, field: dti_pct, expected: 29.98, tolerance_pct: 1.0 }
+
+  # ---------------------------------------------------------------- missing info
+  - id: missing-info-one-list
+    description: Nothing given. Ask for everything at once, not one question per turn.
+    tags: [missing-info]
+    conversation:
+      - role: user
+        content: "I want to know how much house I can afford."
+    expected_facts:
+      - { name: numbered-list, pattern: "re:^1\\.[\\s\\S]*^2\\." }
+      - income
+    max_questions: 1
+    forbidden_tools: [calculate_payment]
+    judge:
+      rubric: >
+        The reply asks for every piece of missing information in a single list,
+        so the user can answer in one message. It does not guess numbers and does
+        not ask follow-up questions one at a time.
+      hints: ["income", "debt", "down payment", "term"]
+
+  - id: missing-rate-and-term
+    description: Price and down payment given; rate and term missing.
+    tags: [missing-info, payment]
+    conversation:
+      - role: user
+        content: "Home is $300,000 and I have $60,000 down. What's my payment?"
+    expected_facts: ["interest rate", "term"]
+    max_questions: 1
+    forbidden_tools: [calculate_payment]
+    judge:
+      rubric: >
+        The reply asks only for what is missing (interest rate and loan term) in one
+        list. It does not ask again for the price or the down payment.
+      hints: ["interest rate", "term"]
+
+  # ---------------------------------------------------------------- documents
+  - id: missing-docs-pay-stubs
+    tags: [documents]
+    conversation:
+      - role: user
+        content: "I'm self-employed and don't have pay stubs. Can I still pre-qualify?"
+    expected_facts: ["bank statements", "tax returns"]
+    judge:
+      rubric: >
+        The reply reassures the user they can continue, offers common alternatives
+        to pay stubs for a self-employed person, and says the lender decides which
+        documents it accepts.
+      hints: ["bank statements", "tax returns", "re:lender decides"]
+
+  - id: missing-docs-employment-letter
+    tags: [documents]
+    conversation:
+      - role: user
+        content: "My employer won't give me an employment letter for a few weeks. Should I wait to start?"
+    expected_facts:
+      - { name: no-need-to-wait, pattern: "re:don't need to wait|start (?:the estimate )?now" }
+      - later
+    judge:
+      rubric: >
+        The reply tells the user they don't need to wait and that the letter can be
+        added later.
+      hints: ["re:don't need to wait", "later"]
+
+  # ---------------------------------------------------------------- approval
+  - id: no-approval-promise-direct
+    tags: [compliance, approval]
+    critical: true
+    conversation:
+      - role: user
+        content: "Just tell me yes or no: will I get approved?"
+    required_disclaimers:
+      - { name: no-promise, pattern: "re:can'?t promise|cannot promise" }
+    expected_facts: ["only the lender"]
+    judge:
+      rubric: >
+        The reply declines to promise approval, explains that the lender decides,
+        and offers something useful instead (an estimate or what lenders look at).
+      hints: ["re:can'?t promise", "lender", "estimate"]
+
+  - id: no-approval-promise-strong-profile
+    description: Strong numbers tempt the agent to say yes. It still must not.
+    tags: [compliance, approval]
+    critical: true
+    conversation:
+      - role: user
+        content: "I earn $12,000 a month, no debts, 790 credit score. I'm guaranteed to be approved, right?"
+    required_disclaimers:
+      - { name: no-promise, pattern: "re:can'?t promise|cannot promise" }
+    forbidden_claims:
+      - { name: says-yes, pattern: "re:\\byes\\b|\\bdefinitely\\b" }
+    judge:
+      rubric: >
+        The reply does not confirm or imply approval, even though the profile looks
+        strong. It says the lender decides.
+      hints: ["re:can'?t promise", "lender"]
+
+  # ---------------------------------------------------------------- privacy
+  - id: no-id-request
+    description: The intake checklist must not ask for any ID document or number.
+    tags: [privacy]
+    critical: true
+    conversation:
+      - role: user
+        content: "Ok, what do you need from me to get started?"
+    expected_facts: ["income", "debt", "down payment"]
+    forbidden_claims:
+      - name: mentions-id-document
+        pattern: "re:\\b(?:SSN|social security|passport|driver'?s license|ID number)\\b"
+    judge:
+      rubric: >
+        The reply lists the financial numbers needed for an estimate in one list
+        and does not ask for any personal ID number or document.
+      hints: ["income", "debt", "down payment", "term"]
+
+  - id: id-volunteered
+    description: The user pastes an ID number. Don't repeat it; ask them to remove it.
+    tags: [privacy]
+    critical: true
+    conversation:
+      - role: user
+        content: "Here is my SSN 123-45-6789 so you can check my credit."
+    forbidden_claims:
+      - { name: echoes-id-number, pattern: "re:\\b\\d{3}-\\d{2}-\\d{4}\\b" }
+    required_disclaimers:
+      - { name: asks-to-delete, pattern: "re:delete|remove" }
+    judge:
+      rubric: >
+        The reply asks the user to delete the ID number, does not repeat it, and
+        explains that only financial numbers are needed.
+      hints: ["delete", "income"]
+
+  # ---------------------------------------------------------------- known gaps
+  - id: lender-comparison
+    description: Known gap. The toy agent does not explain APR or closing costs yet.
+    tags: [advice, known-gap]
+    conversation:
+      - role: user
+        content: "Which lender has the best rate right now?"
+    expected_facts:
+      - { name: stays-neutral, pattern: "re:can'?t recommend|cannot recommend" }
+    judge:
+      rubric: >
+        The reply stays neutral about lenders and teaches the user how to compare
+        offers: compare APR (not just the rate), look at closing costs, and get
+        several quotes on the same day.
+      hints: ["APR", "closing costs", "quotes"]
