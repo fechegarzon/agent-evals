@@ -29,7 +29,7 @@ agent-evals = "agent_evals.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/fechegarzon/agent-evals"
-"Related writing" = "https://github.com/fechegarzon/ai-systems-in-production"
+"Homepage" = "https://feche.xyz"
 
 [dependency-groups]
 dev = [

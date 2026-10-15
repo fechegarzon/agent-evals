@@ -283,8 +283,7 @@ examples/toy_agent.py   deterministic agent: respond (good), respond_v2 (regress
 
 ## Related
 
-I write about running AI systems in production at
-[github.com/fechegarzon/ai-systems-in-production](https://github.com/fechegarzon/ai-systems-in-production).
+More about how I work with AI systems in production: [feche.xyz](https://feche.xyz).
 
 ## License
 
